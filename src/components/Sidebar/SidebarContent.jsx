@@ -1,21 +1,20 @@
-import React from "react";
-import styled from "styled-components/macro";
-import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
-import SidebarChannel from "./SidebarChannel";
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
-import { useSelector } from "react-redux";
-import { selectTextChannels } from "features/channelsSlice";
+import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
+import { createChannel, selectTextChannels } from "features/channelsSlice";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components/macro";
+import SidebarChannel from "./SidebarChannel";
 
 const SidebarContent = () => {
+  const dispatch = useDispatch();
   const channels = useSelector(selectTextChannels);
 
   const handleAddChannel = () => {
     const channelName = prompt("Enter new channel name");
 
     if (channelName) {
-      // db.collection("channels").add({
-      // 	channelName: channelName,
-      // });
+      dispatch(createChannel({ name: channelName }));
     }
   };
 

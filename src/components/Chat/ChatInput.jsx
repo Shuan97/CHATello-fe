@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import styled from "styled-components/macro";
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
-import io from "socket.io-client";
-import { useDispatch, useSelector } from "react-redux";
-import { pushNewMessage } from "features/messagesSlice";
 import { selectChannelUUID } from "features/channelsSlice";
+import { pushNewMessage } from "features/messagesSlice";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import io from "socket.io-client";
+import styled from "styled-components/macro";
 
 const ChatInput = ({ channelName }) => {
   const dispatch = useDispatch();
@@ -30,7 +30,6 @@ const ChatInput = ({ channelName }) => {
   }, []);
 
   useEffect(() => {
-    console.log("socket", socket);
     if (!!socket && !!channelUUID) {
       socket.off();
       socket.on(`messageToChannel=${channelUUID}`, (message) => {
