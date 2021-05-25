@@ -5,16 +5,18 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
 import * as Yup from "yup";
-import background from "../../assets/pexels-bg.jpg";
+// import background from "../../assets/pexels-bg.jpg";
 
-const Login = () => {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
+const Login = (props) => {
   const dispatch = useDispatch();
   const [validationSchema] = useState(
     Yup.object().shape({
-      email: Yup.string().email("email to kurwa").required("Dupa"),
-      password: Yup.string().required(),
+      email: Yup.string()
+        .email("Must be a valid email")
+        .required("Email is required"),
+      password: Yup.string("Must be a valid password").required(
+        "Password is required"
+      ),
     })
   );
 
@@ -47,34 +49,14 @@ const Login = () => {
                 placeholder='password'
                 label='Password'
                 name='password'
+                type='password'
               />
-              <SubmitButton className='text-white' type='submit'>
+              <SubmitButton className='py-2 text-white' type='submit'>
                 Login
               </SubmitButton>
             </Form>
           )}
         </Formik>
-        {/* <CenteringWrapper>
-          <LoginContainer>
-            <Input label='test' name='test'></Input>
-            <InputField
-              label='Email'
-              type='text'
-              value={email}
-              onChange={(value) => setEmail(value)}
-            />
-            <InputField
-              label='Password'
-              type='password'
-              value={password}
-              onChange={(value) => setPassword(value)}
-            />
-            <SubmitButton type='submit' onClick={handleLoginSubmit}>
-              Login
-            </SubmitButton>
-          </LoginContainer>
-          <LogoContainer>Logo</LogoContainer>
-        </CenteringWrapper> */}
       </LoginForm>
     </StyledLogin>
   );
@@ -88,10 +70,10 @@ const StyledLogin = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  background-image: url(${background});
-  background-size: cover;
-  background-position: 100%;
 `;
+/* background-image: url(${background});
+  background-size: cover;
+  background-position: 100%; */
 
 const LoginForm = styled.div`
   height: 564px;
@@ -128,10 +110,8 @@ const LogoContainer = styled.div`
   height: 100%;
   margin-left: 4rem;
   border: 2px solid gold;
-  background-image: url(${background});
   background-size: cover;
   background-position: 100%;
-  /*  */
   color: white;
   font-size: 24px;
 `;

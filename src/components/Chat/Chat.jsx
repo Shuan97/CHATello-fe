@@ -1,11 +1,15 @@
+import Sidebar from "components/Sidebar/Sidebar";
 import { selectChannelName, selectChannelUUID } from "features/channelsSlice";
 import { fetchMessagesByChannel } from "features/messagesSlice";
+import { fetchTextChannels } from "features/channelsSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/macro";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
+import ChatNavbar from "components/Chat/ChatNavbar";
+import tw from "tailwind-styled-components";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -13,22 +17,27 @@ const Chat = () => {
   const channelName = useSelector(selectChannelName);
 
   useEffect(() => {
-    !!channelUUID && dispatch(fetchMessagesByChannel());
+    if (!channelUUID) {
+      dispatch(fetchTextChannels());
+    } else {
+      dispatch(fetchMessagesByChannel());
+    }
   }, [dispatch, channelUUID]);
 
   return (
     <StyledChat>
-      <ChatHeader channelName={channelName} />
-      <ChatMessages />
-      <ChatInput channelUUID={channelUUID} channelName={channelName} />
+      <ChatNavbar />
+      <Sidebar />
+      <MainChat>
+        <ChatHeader channelName={channelName} />
+        <ChatMessages />
+        <ChatInput channelUUID={channelUUID} channelName={channelName} />
+      </MainChat>
     </StyledChat>
   );
 };
 
-export default Chat;
+const MainChat = tw.div`flex flex-col w-full`;
+const StyledChat = tw.div`flex`;
 
-const StyledChat = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-`;
+export default Chat;

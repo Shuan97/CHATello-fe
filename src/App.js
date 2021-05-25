@@ -1,72 +1,59 @@
+import PrivateRoute from "components/common/PrivateRoute";
+import Dashboard from "components/Dashboard/Dashboard";
+import { isEmpty } from "lodash";
 import React, { useEffect } from "react";
-import styled, { ThemeProvider } from "styled-components/macro";
-import "./App.css";
-import Sidebar from "./components/Sidebar/Sidebar";
-import { light, dark } from "./assets/theme";
-import { UseDarkMode } from "./utils/UseDarkMode";
-import { THEME } from "./utils/Constants";
-import Navbar from "./components/Navbar/Navbar";
-import Layout from "./components/Layout";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { useDispatch, useSelector } from "react-redux";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import styled, { ThemeProvider } from "styled-components/macro";
+import API from "utils/API";
+import history from "utils/history";
+import { dark, light } from "./assets/theme";
+import Login from "./components/Auth/Login";
+import Layout from "./components/Layout";
 import {
   fetchUserProfile,
-  selectUser,
   selectToken,
+  selectUser,
+  setToken,
 } from "./features/userSlice";
-import Login from "./components/Auth/Login";
-import { Redirect, Route, Switch } from "react-router-dom";
-import API from "utils/API";
-import { isEmpty } from "lodash";
-import { fetchTextChannels } from "features/channelsSlice";
+import { THEME } from "./utils/Constants";
+import { UseDarkMode } from "./utils/UseDarkMode";
 
-const localStorageToken = localStorage.getItem("token");
+history.listen((location, action) => {
+  // location is an object like window.location
+  console.log(action, location.pathname, location.state);
+});
 
-function App() {
+const App = () => {
   const [theme, toggleTheme] = UseDarkMode();
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
   const token = useSelector(selectToken);
-  const notify = ({ message }) =>
-    toast.info(`${message}! 😁`, {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
 
   /**
    * Pass [Authorization] header into axios instance
    * from localStorageToken or store token
    */
   useEffect(() => {
-    if (localStorageToken) {
-      API.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${localStorageToken}`;
-    } else if (token) {
+    if (!!token) {
       API.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     }
   }, [token]);
+
+  useEffect(() => {
+    !token && dispatch(setToken());
+  }, [dispatch, token]);
 
   /**
    * If localStorageToken or store token exists fetch user profile
    */
   useEffect(() => {
-    (!!localStorageToken || !!token) &&
-      isEmpty(user) &&
-      dispatch(fetchUserProfile()).then(() => {
-        notify({
-          message: "Successfully logged in",
-        });
-        dispatch(fetchTextChannels());
-      });
+    if (!!token && isEmpty(user)) {
+      dispatch(fetchUserProfile());
+    }
   }, [dispatch, token, user]);
-
   return (
     <ThemeProvider theme={theme === THEME.light ? light : dark}>
       <StyledApp
@@ -75,17 +62,10 @@ function App() {
           console.log("Right mouse button pressed!");
         }}
       >
-        {isEmpty(user) ? <Redirect exact to='/login' /> : <Redirect to='/' />}
         <Switch>
-          <Route exact path='/login'>
-            <Login toggleTheme={toggleTheme} notify={notify} />
-          </Route>
-          <Route exact path='/'>
-            <Layout />
-          </Route>
-          <Route path='*'>
-            <Redirect to='/' />
-          </Route>
+          <Route exact path='/login' component={Login} />
+          <PrivateRoute path='/' component={Layout} />
+          <Route path='*'>No match</Route>
         </Switch>
       </StyledApp>
       <ToastContainer
@@ -101,7 +81,7 @@ function App() {
       />
     </ThemeProvider>
   );
-}
+};
 
 export default App;
 
@@ -109,7 +89,9 @@ const StyledApp = styled.div`
   background: ${({ theme }) => theme.backgroundTertiary};
   display: flex;
   height: 100vh;
+  overflow: hidden;
 
+  // icons/controllers
   .MuiSvgIcon-root {
     color: ${({ theme }) => theme.textPrimary};
     transition: font-size 100ms linear, color 100ms linear;

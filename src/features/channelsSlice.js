@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { thunkStatus } from "constants/status";
 
 export const fetchTextChannels = createAsyncThunk(
-  "channels/fetchAllChannels",
+  "channels/fetchTextChannels",
   (_, { extra, rejectWithValue }) =>
     extra.API.get("channels")
       .then((response) => response.data)

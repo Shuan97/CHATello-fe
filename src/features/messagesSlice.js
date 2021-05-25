@@ -26,7 +26,7 @@ export const messagesSlice = createSlice({
     },
   },
   extraReducers: {
-    // fetchTextChannels
+    // fetchMessagesByChannel
     [fetchMessagesByChannel.pending]: (state, action) => {
       state.requestStatus.messages = action.meta.requestStatus;
     },

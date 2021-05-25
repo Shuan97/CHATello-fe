@@ -1,4 +1,6 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import history, { pushHistoryAsync } from "utils/history";
+import { showToast } from "utils/toast";
 
 export const authUser = createAsyncThunk(
   "user/authUser",
@@ -13,30 +15,37 @@ export const authUser = createAsyncThunk(
 
 export const fetchUserProfile = createAsyncThunk(
   "user/fetchUserProfile",
-  (_, { extra, rejectWithValue }) =>
+  (_, { extra, rejectWithValue, dispatch }) =>
     extra.API.get("auth/profile")
-      .then((response) => response.data)
-      .catch((error) => rejectWithValue(error.response.data))
+      .then((response) => {
+        showToast("Successfully logged in!");
+        return response.data;
+      })
+      .catch((error) => {
+        dispatch(logout());
+        return rejectWithValue(error.response.data);
+      })
 );
 
 export const userSlice = createSlice({
   name: "user",
   initialState: {
     data: null,
-    token: "",
+    token: null,
     requestStatus: {
       data: {},
       token: {},
     },
   },
   reducers: {
-    login: (state, action) => {
-      state.data = action.payload;
-    },
     logout: (state) => {
       state.data = null;
       state.token = null;
       localStorage.removeItem("token");
+      history.push("/login");
+    },
+    setToken: (state) => {
+      state.token = localStorage.getItem("token") || null;
     },
   },
   extraReducers: {
@@ -52,7 +61,7 @@ export const userSlice = createSlice({
     },
     [authUser.rejected]: (state, action) => {
       localStorage.removeItem("token");
-      state.token = "";
+      state.token = null;
       state.requestStatus.token = action.meta.requestStatus;
     },
 
@@ -63,6 +72,7 @@ export const userSlice = createSlice({
     [fetchUserProfile.fulfilled]: (state, action) => {
       state.data = action.payload;
       state.requestStatus.data = action.meta.requestStatus;
+      pushHistoryAsync("/");
     },
     [fetchUserProfile.rejected]: (state, action) => {
       state.requestStatus.data = action.meta.requestStatus;
@@ -70,7 +80,7 @@ export const userSlice = createSlice({
   },
 });
 
-export const { login, logout } = userSlice.actions;
+export const { login, logout, setToken } = userSlice.actions;
 
 export const selectUser = (state) => state.user.data;
 export const selectToken = (state) => state.user.token;
