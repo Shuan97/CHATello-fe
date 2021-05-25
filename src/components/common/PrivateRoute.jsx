@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
+import { historyLink } from "utils/history";
 import { isTokenExpired } from "utils/token";
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
@@ -10,12 +11,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         !isTokenExpired() ? (
           <Component {...props} />
         ) : (
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: props.location },
-            }}
-          />
+          <Redirect to={historyLink("/login")} />
         )
       }
     />

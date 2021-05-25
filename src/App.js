@@ -1,7 +1,8 @@
+import Loader from "components/common/Loader";
 import PrivateRoute from "components/common/PrivateRoute";
 import Dashboard from "components/Dashboard/Dashboard";
 import { isEmpty } from "lodash";
-import React, { useEffect } from "react";
+import React, { useEffect, Suspense, lazy } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -10,8 +11,6 @@ import styled, { ThemeProvider } from "styled-components/macro";
 import API from "utils/API";
 import history from "utils/history";
 import { dark, light } from "./assets/theme";
-import Login from "./components/Auth/Login";
-import Layout from "./components/Layout";
 import {
   fetchUserProfile,
   selectToken,
@@ -21,9 +20,13 @@ import {
 import { THEME } from "./utils/Constants";
 import { UseDarkMode } from "./utils/UseDarkMode";
 
+const Login = lazy(() => import("./components/Auth/Login"));
+const Layout = lazy(() => import("./components/Layout"));
+
 history.listen((location, action) => {
-  // location is an object like window.location
-  console.log(action, location.pathname, location.state);
+  console.log(
+    `[History]: ${location.state?.from?.pathname} => ${location.pathname}`
+  );
 });
 
 const App = () => {
@@ -62,11 +65,13 @@ const App = () => {
           console.log("Right mouse button pressed!");
         }}
       >
-        <Switch>
-          <Route exact path='/login' component={Login} />
-          <PrivateRoute path='/' component={Layout} />
-          <Route path='*'>No match</Route>
-        </Switch>
+        <Suspense fallback={<Loader />}>
+          <Switch>
+            <Route exact path='/login' component={Login} />
+            <PrivateRoute path='/' component={Layout} />
+            <Route path='*'>No match</Route>
+          </Switch>
+        </Suspense>
       </StyledApp>
       <ToastContainer
         position='top-right'

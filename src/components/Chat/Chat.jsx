@@ -1,4 +1,4 @@
-import Sidebar from "components/Sidebar/Sidebar";
+import Sidebar from "components/Chat/ChatSidebar/ChatSidebar";
 import { selectChannelName, selectChannelUUID } from "features/channelsSlice";
 import { fetchMessagesByChannel } from "features/messagesSlice";
 import { fetchTextChannels } from "features/channelsSlice";

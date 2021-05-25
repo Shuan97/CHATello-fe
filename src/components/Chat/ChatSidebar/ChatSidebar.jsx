@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
-import SidebarContent from "./SidebarContent";
-import SidebarProfile from "./SidebarProfile";
+import SidebarContent from "./ChatSidebarContent";
+import SidebarProfile from "./ChatSidebarProfile";
 
 const Sidebar = () => {
   return (

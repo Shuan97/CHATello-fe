@@ -1,17 +1,22 @@
 import React from "react";
 import styled from "styled-components";
+import tw from "tailwind-styled-components";
 
 const Loader = () => {
   return (
-    <StyledLoader>
-      <LoaderDot />
-      <LoaderDot />
-      <LoaderDot />
-    </StyledLoader>
+    <Container>
+      <Wrapper>
+        <LoaderDot />
+        <LoaderDot />
+        <LoaderDot />
+      </Wrapper>
+    </Container>
   );
 };
 
-const StyledLoader = styled.div`
+const Container = tw.div`flex-center h-full w-full`;
+
+const Wrapper = styled.div`
   width: 60px;
   height: 60px;
   display: flex;

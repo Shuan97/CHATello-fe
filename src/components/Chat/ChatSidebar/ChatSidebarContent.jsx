@@ -4,7 +4,7 @@ import { createChannel, selectTextChannels } from "features/channelsSlice";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components/macro";
-import SidebarChannel from "./SidebarChannel";
+import SidebarChannel from "./ChatSidebarChannel";
 
 const SidebarContent = () => {
   const dispatch = useDispatch();

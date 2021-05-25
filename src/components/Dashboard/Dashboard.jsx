@@ -5,31 +5,32 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import { historyLink } from "utils/history";
 
 const Dashboard = () => {
   return (
     <BlocksContainer>
       {/* <Header>Welcome!</Header> */}
       <BlockWrapper>
-        <Link to='/chat'>
+        <Link to={historyLink("/chat")}>
           <Block>
             <ChatIcon>Hello</ChatIcon>
             <Label>Chat</Label>
           </Block>
         </Link>
-        <Link to='/'>
+        <Link to={historyLink("/chat")}>
           <Block>
             <WidgetsIcon />
             <Label>Knowledge center</Label>
           </Block>
         </Link>
-        <Link to='/'>
+        <Link to={historyLink("/chat")}>
           <Block>
             <GroupWorkIcon />
             <Label>[WIP]</Label>
           </Block>
         </Link>
-        <Link to='/'>
+        <Link to={historyLink("/chat")}>
           <Block>
             <GroupWorkIcon />
             <Label>[WIP]</Label>

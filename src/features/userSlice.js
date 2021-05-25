@@ -42,7 +42,7 @@ export const userSlice = createSlice({
       state.data = null;
       state.token = null;
       localStorage.removeItem("token");
-      history.push("/login");
+      pushHistoryAsync("/login");
     },
     setToken: (state) => {
       state.token = localStorage.getItem("token") || null;
@@ -72,7 +72,9 @@ export const userSlice = createSlice({
     [fetchUserProfile.fulfilled]: (state, action) => {
       state.data = action.payload;
       state.requestStatus.data = action.meta.requestStatus;
-      pushHistoryAsync("/");
+      if (history.location?.pathname === "/login") {
+        pushHistoryAsync(history.location?.state?.from?.pathname || "/");
+      }
     },
     [fetchUserProfile.rejected]: (state, action) => {
       state.requestStatus.data = action.meta.requestStatus;
