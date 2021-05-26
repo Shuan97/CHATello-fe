@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import styled from "styled-components/macro";
 
+/* eslint-disable react/prop-types */
 const ChatInput = ({ channelName }) => {
   const dispatch = useDispatch();
   const channelUUID = useSelector(selectChannelUUID);

@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
 import { setChannelInfo } from "features/channelsSlice";
 
+/* eslint-disable react/prop-types */
 const SidebarChannel = ({ id, channelName }) => {
   const dispatch = useDispatch();
 

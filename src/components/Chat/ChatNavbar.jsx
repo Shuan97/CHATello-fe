@@ -10,6 +10,7 @@ import GitHubIcon from "@material-ui/icons/GitHub";
 import { useDispatch } from "react-redux";
 import { logout } from "features/userSlice";
 
+/* eslint-disable react/prop-types */
 const Navbar = ({ toggleTheme, notify }) => {
   const dispatch = useDispatch();
 

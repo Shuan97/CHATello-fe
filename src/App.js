@@ -11,6 +11,7 @@ import styled, { ThemeProvider } from "styled-components/macro";
 import API from "utils/API";
 import history from "utils/history";
 import { dark, light } from "./assets/theme";
+import Modal from "./components/common/Modal/Modal";
 import {
   fetchUserProfile,
   selectToken,
@@ -68,6 +69,7 @@ const App = () => {
         <Suspense fallback={<Loader />}>
           <Switch>
             <Route exact path='/login' component={Login} />
+            <Route exact path='/modal' component={Modal} />
             <PrivateRoute path='/' component={Layout} />
             <Route path='*'>No match</Route>
           </Switch>
