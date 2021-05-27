@@ -10,6 +10,9 @@ module.exports = {
       fontSize: {
         xxl: "12rem",
       },
+      zIndex: {
+        "-10": "-10",
+      },
     },
   },
   variants: {

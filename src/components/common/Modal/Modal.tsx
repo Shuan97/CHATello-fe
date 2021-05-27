@@ -1,49 +1,74 @@
 import ModalHeader from "components/common/Modal/ModalHeader";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import PropTypes from 'prop-types';
+import ModalDialog from "./ModalDialog";
+import ModalBody from "./ModalBody";
+import ModalFooter from "./ModalFooter";
 
-interface ModalProps {
+export interface IModalProps {
   children: React.ReactNode | React.ReactNode[],
   show: boolean | null,
-  onHide?: () => void | null,
+  onHide: (show: boolean) => void;
 }
 
 const propTypes = {
   children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.any),
+    PropTypes.arrayOf(PropTypes.element),
     PropTypes.element
   ]),
-  show: PropTypes.bool,
-  onHide: PropTypes.func,
+  show: PropTypes.bool.isRequired,
+  onHide: PropTypes.func.isRequired,
 }
 
-// eslint-disable-next-line react/prop-types
+const defaultProps = {
+  show: false,
+  onHide: () => {
+    console.log("Hide modal")
+  },
+}
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const Modal: React.FC<ModalProps> = ({ children, show, onHide, ...props }) => {
+const Modal: React.FC<IModalProps> = ({ children, show, onHide, ...props }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  useEffect(() => {
+    !!show && setShowModal(true)
+    return () => {
+      setShowModal(false)
+    }
+  }, [show])
+
+  if(!showModal) {
+    return null
+  }
+
+  const handleBackdropClick = () => {
+    setShowModal(false)
+    onHide(false)
+  }
+
   return (
     <StyledModal role='dialog'>
-      <Backdrop />
-      <Dialog>{children}</Dialog>
+      <Backdrop onClick={handleBackdropClick}/>
+      <ModalDialog show={show} onHide={onHide} {...props}>{children}</ModalDialog>
     </StyledModal>
   );
 };
 
-const StyledModal = styled.div``;
-const Backdrop = styled.div``
+const StyledModal = styled.div.attrs({
+  className: "flex-center fixed w-screen h-screen z-50 top-0 left-0"
+})``;
+const Backdrop = styled.div.attrs({
+  className: "absolute h-full w-full opacity-50 bg-black -z-10 cursor-pointer"
+})``
 
-const Dialog = styled.div``;
-const Body = styled.div``;
-const Footer = styled.div``;
-const Title = styled.div``;
-
+Modal.displayName = 'Modal';
 Modal.propTypes = propTypes;
+Modal.defaultProps = defaultProps;
 
 export default Object.assign(Modal, {
-  Dialog: Dialog,
+  Dialog: ModalDialog,
   Header: ModalHeader,
-  Body: Body,
-  Footer: Footer,
-  Title: Title,
+  Body: ModalBody,
+  Footer: ModalFooter,
 });

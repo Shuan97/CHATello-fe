@@ -1,2 +1,6 @@
-src/*js
-src/*jsx
+# .js
+# .jsx
+# *.js
+# *.jsx
+# src/*js
+# src/*jsx

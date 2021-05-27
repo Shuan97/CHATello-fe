@@ -6,7 +6,7 @@ const Navbar = () => {
 };
 
 const StyledNavbar = styled.nav`
-  z-index: 9999;
+  z-index: 10;
   display: flex;
   align-items: center;
   height: 64px;

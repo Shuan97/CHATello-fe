@@ -1,4 +1,4 @@
-import TextInput from "components/common/Form/Input";
+import TextInput from "components/common/Form/TextInput";
 import { authUser } from "features/userSlice";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";

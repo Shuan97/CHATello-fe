@@ -5,7 +5,6 @@ import NotificationsRoundedIcon from "@material-ui/icons/NotificationsRounded";
 import PeopleAltRoundedIcon from "@material-ui/icons/PeopleAltRounded";
 import SearchRoundedIcon from "@material-ui/icons/SearchRounded";
 
-/* eslint-disable react/prop-types */
 const ChatHeader = ({ channelName }) => {
   const inputRef = React.createRef();
   return (
