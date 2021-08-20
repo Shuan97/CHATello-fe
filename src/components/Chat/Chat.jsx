@@ -1,4 +1,4 @@
-import Sidebar from "components/Chat/ChatSidebar/ChatSidebar";
+import ChatSidebar from "components/Chat/ChatSidebar/ChatSidebar";
 import { selectChannelName, selectChannelUUID } from "features/channelsSlice";
 import { fetchMessagesByChannel } from "features/messagesSlice";
 import { fetchTextChannels } from "features/channelsSlice";
@@ -27,7 +27,7 @@ const Chat = () => {
   return (
     <StyledChat>
       <ChatNavbar />
-      <Sidebar />
+      <ChatSidebar />
       <MainChat>
         <ChatHeader channelName={channelName} />
         <ChatMessages />

@@ -18,7 +18,7 @@ const Dashboard = () => {
             <Label>Chat</Label>
           </Block>
         </Link>
-        <Link to={historyLink("/chat")}>
+        <Link to={historyLink("/knowledge_center")}>
           <Block>
             <WidgetsIcon />
             <Label>Knowledge center</Label>

@@ -15,6 +15,6 @@ const ModalBody: React.FC<IModalBodyProps> = ({ children, ...props }) => {
   )
 }
 
-const Body = tw.div`flex p-4`
+const Body = tw.div`flex px-4 py-6`
 
 export default ModalBody

@@ -1,22 +1,44 @@
 import React, { useEffect } from "react";
 import styled from "styled-components/macro";
 import { Avatar } from "@material-ui/core";
+import { selectUser } from "features/userSlice";
+import { useSelector } from "react-redux";
 
-const Message = ({ message }) => {
+interface IMessageProps {
+  message: any;
+}
+
+interface IMessageContainer {
+  isUserMessage: boolean;
+}
+
+const Message: React.FC<IMessageProps> = ({ message }) => {
   const date = new Date(message.createdAt).toLocaleString();
-  const user = message.user;
+  const { UUID } = useSelector(selectUser);
+
+  const isUserMessage = () => {
+    return UUID === message.user.UUID;
+  };
 
   return (
     <MessageListItem>
-      {user && (
-        <MessageContainer>
+      {!!message.user && (
+        <MessageContainer isUserMessage={isUserMessage()}>
           <Avatar src='https://avatars.githubusercontent.com/u/35654946?s=460&u=177d19ab4fef81db30b3bc104be0871e00818822&v=4' />
           <MessageWrapper>
             <MessageHeader>
-              <MessageLabel>{user.name}</MessageLabel>
+              <MessageLabel
+                className={`${
+                  message.user.name.indexOf("ADMIN") === 0 && "text-accent-1"
+                }`}
+              >
+                {message.user.name}
+              </MessageLabel>
               <MessageTimestamp>{date}</MessageTimestamp>
             </MessageHeader>
-            <MessageBodyContent>{message.body}</MessageBodyContent>
+            <MessageBodyContent isUserMessage={isUserMessage()}>
+              <span>{message.body}</span>
+            </MessageBodyContent>
           </MessageWrapper>
         </MessageContainer>
       )}
@@ -24,27 +46,25 @@ const Message = ({ message }) => {
   );
 };
 
-export default Message;
-
 const MessageListItem = styled.div`
   display: flex;
-  padding-right: 3rem;
   color: ${({ theme }) => theme.textPrimary};
 `;
 
-const MessageContainer = styled.div`
+const MessageContainer = styled.div<IMessageContainer>`
   display: flex;
   width: 100%;
-  margin: 1rem 0;
+  margin: 0.5rem 0;
+  ${({ isUserMessage }) => isUserMessage && "flex-direction: row-reverse"};
 `;
 
-const MessageBodyContent = styled.div`
+const MessageBodyContent = styled.div<IMessageContainer>`
   display: flex;
   height: 100%;
   width: 100%;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
-  background: #444;
+  background: ${({ isUserMessage }) => (isUserMessage ? "#57595C" : "#444")};
   font-size: 0.875rem;
   box-shadow: 0 0 4px ${({ theme }) => theme.borderPrimary};
 `;
@@ -54,7 +74,7 @@ const MessageWrapper = styled.div`
   flex-direction: column;
   min-width: 360px;
   max-width: 75%;
-  margin-left: 1rem;
+  margin: 0 1rem;
 `;
 
 const MessageHeader = styled.div`
@@ -74,3 +94,5 @@ const MessageTimestamp = styled.div`
   font-size: 0.625rem;
   font-size: x-small;
 `;
+
+export default Message;

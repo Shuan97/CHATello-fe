@@ -15,6 +15,6 @@ const ModalFooter: React.FC<IModalFooterProps> = ({ children }) => {
   )
 }
 
-const Footer = tw.div`flex justify-end border-t border-gray-600 p-4`
+const Footer = tw.div`flex justify-end border-t border-primary-1 p-4`
 
 export default ModalFooter

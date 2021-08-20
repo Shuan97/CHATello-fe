@@ -7,7 +7,7 @@ import styled from "styled-components/macro";
 import * as Yup from "yup";
 // import background from "../../assets/pexels-bg.jpg";
 
-const Login = (props) => {
+const Login = () => {
   const dispatch = useDispatch();
   const [validationSchema] = useState(
     Yup.object().shape({

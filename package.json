@@ -38,6 +38,7 @@
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.12.13",
     "@tailwindcss/postcss7-compat": "^2.1.0",
+    "@types/react-redux": "^7.1.16",
     "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",

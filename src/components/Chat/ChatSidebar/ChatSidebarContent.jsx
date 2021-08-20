@@ -1,16 +1,17 @@
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
-import { createChannel, selectTextChannels } from "features/channelsSlice";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components/macro";
-import SidebarChannel from "./ChatSidebarChannel";
+import TextInput from "components/common/Form/TextInput";
 import Modal from "components/common/Modal/Modal";
 import VariantButton from "components/common/VariantButton";
 import { variant } from "constants/variant";
+import { createChannel, selectTextChannels } from "features/channelsSlice";
+import { selectUser } from "features/userSlice";
 import { Form, Formik } from "formik";
-import TextInput from "components/common/Form/TextInput";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import styled from "styled-components/macro";
 import * as Yup from "yup";
+import SidebarChannel from "./ChatSidebarChannel";
 
 const textChannelContext = {
   type: "TEXT",
@@ -25,8 +26,11 @@ const voiceChannelContext = {
 const SidebarContent = () => {
   const dispatch = useDispatch();
   const channels = useSelector(selectTextChannels);
+  const user = useSelector(selectUser);
   const [showModal, setShowModal] = useState(false);
   const [modalContext, setModalContext] = useState({});
+  const [textChannelsCollapse, setTextChannelsCollapse] = useState(false);
+  const [voiceChannelsCollapse, setVoiceChannelsCollapse] = useState(true);
 
   const [validationSchema] = useState(
     Yup.object().shape({
@@ -66,34 +70,50 @@ const SidebarContent = () => {
     <StyledSidebarContent>
       <ChannelHeaderWrapper>
         <ChannelHeader>
-          <ExpandMoreRoundedIcon />
+          <ExpandMoreRoundedIcon
+            // classes={{
+            //   root: "transform -rotate-90 bg-red-500",
+            // }}
+            className={`${textChannelsCollapse && "transform -rotate-90"}`}
+            onClick={() => setTextChannelsCollapse((value) => !value)}
+          />
           <h2>Text channels</h2>
         </ChannelHeader>
-        <AddRoundedIcon
-          onClick={() => {
-            handleAddChannel("TEXT");
-          }}
-        />
+        {user && user.role === "admin" && (
+          <AddRoundedIcon
+            onClick={() => {
+              handleAddChannel("TEXT");
+            }}
+          />
+        )}
       </ChannelHeaderWrapper>
-      <ChannelsList>
-        {channels &&
-          channels.length > 0 &&
-          channels.map(({ UUID, name }) => (
-            <SidebarChannel key={UUID} id={UUID} channelName={name} />
-          ))}
-      </ChannelsList>
+      {!textChannelsCollapse && (
+        <ChannelsList>
+          {channels &&
+            channels.length > 0 &&
+            channels.map(({ UUID, name }) => (
+              <SidebarChannel key={UUID} id={UUID} channelName={name} />
+            ))}
+        </ChannelsList>
+      )}
 
       <ChannelHeaderWrapper>
         <ChannelHeader>
-          <ExpandMoreRoundedIcon />
+          <ExpandMoreRoundedIcon
+            className={`${voiceChannelsCollapse && "transform -rotate-90"}`}
+            onClick={() => setVoiceChannelsCollapse((value) => !value)}
+          />
           <h2>Voice channels</h2>
         </ChannelHeader>
-        <AddRoundedIcon
-          onClick={() => {
-            handleAddChannel("VOICE");
-          }}
-        />
+        {user && user.role === "admin" && (
+          <AddRoundedIcon
+            onClick={() => {
+              handleAddChannel("VOICE");
+            }}
+          />
+        )}
       </ChannelHeaderWrapper>
+      {!voiceChannelsCollapse && <ChannelsList>Voice [WIP]</ChannelsList>}
       <Formik
         initialValues={{
           channelName: "",

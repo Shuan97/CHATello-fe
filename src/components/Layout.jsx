@@ -14,6 +14,9 @@ const Layout = () => {
           <Route exact path='/chat'>
             <Chat />
           </Route>
+          <Route exact path='/knowledge_center'>
+            Hello KC
+          </Route>
           <Route exact path='/'>
             <Dashboard />
           </Route>
