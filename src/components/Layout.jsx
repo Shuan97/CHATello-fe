@@ -3,6 +3,7 @@ import Article from "components/KnowledgeCenter/Article";
 import ArticleList from "components/KnowledgeCenter/ArticleList";
 import KnowledgeCenter from "components/KnowledgeCenter/KnowledgeCenter";
 import Navbar from "components/Navbar/Navbar";
+import TasksList from "components/Tasks/TasksList";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
@@ -25,6 +26,9 @@ const Layout = () => {
           </Route>
           <Route exact path='/knowledge_center'>
             <KnowledgeCenter />
+          </Route>
+          <Route exact path='/tasks'>
+            <TasksList />
           </Route>
           <Route exact path='/'>
             <Dashboard />

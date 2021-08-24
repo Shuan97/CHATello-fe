@@ -24,10 +24,10 @@ const Dashboard = () => {
             <Label>Knowledge center</Label>
           </Block>
         </Link>
-        <Link to={historyLink("/chat")}>
+        <Link to={historyLink("/test_your_knowledge")}>
           <Block>
             <GroupWorkIcon />
-            <Label>[WIP]</Label>
+            <Label>Test your knowledge</Label>
           </Block>
         </Link>
         <Link to={historyLink("/chat")}>
