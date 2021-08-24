@@ -1,15 +1,17 @@
+import ChatNavbar from "components/Chat/ChatNavbar";
 import ChatSidebar from "components/Chat/ChatSidebar/ChatSidebar";
-import { selectChannelName, selectChannelUUID } from "features/channelsSlice";
+import {
+  fetchTextChannels,
+  selectChannelName,
+  selectChannelUUID,
+} from "features/channelsSlice";
 import { fetchMessagesByChannel } from "features/messagesSlice";
-import { fetchTextChannels } from "features/channelsSlice";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import styled from "styled-components/macro";
+import tw from "tailwind-styled-components";
 import ChatHeader from "./ChatHeader";
 import ChatInput from "./ChatInput";
 import ChatMessages from "./ChatMessages";
-import ChatNavbar from "components/Chat/ChatNavbar";
-import tw from "tailwind-styled-components";
 
 const Chat = () => {
   const dispatch = useDispatch();

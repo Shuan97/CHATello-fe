@@ -9,6 +9,8 @@ import WidgetsIcon from "@material-ui/icons/Widgets";
 import GitHubIcon from "@material-ui/icons/GitHub";
 import { useDispatch } from "react-redux";
 import { logout } from "features/userSlice";
+import { Link } from "react-router-dom";
+import { historyLink } from "utils/history";
 
 const Navbar = ({ toggleTheme, notify }) => {
   const dispatch = useDispatch();
@@ -33,16 +35,14 @@ const Navbar = ({ toggleTheme, notify }) => {
         <NavbarSpacer></NavbarSpacer>
 
         <NavbarListElement>
-          <a
-            href='https://github.com/Shuan97/inz'
-            target='_blank'
-            rel='noreferrer'
-          >
+          <Link to={historyLink("/")}>
+            <WidgetsIcon />
+          </Link>
+        </NavbarListElement>
+        <NavbarListElement>
+          <a href='https://github.com/Shuan97' target='_blank' rel='noreferrer'>
             <GitHubIcon />
           </a>
-        </NavbarListElement>
-        <NavbarListElement onClick={notify}>
-          <WidgetsIcon />
         </NavbarListElement>
         <NavbarListElement onClick={toggleTheme}>
           <SettingsRoundedIcon />

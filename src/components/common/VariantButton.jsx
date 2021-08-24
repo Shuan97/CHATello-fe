@@ -1,12 +1,11 @@
-import React from "react";
-import styled from "styled-components";
-import tw from "tailwind-styled-components";
 import { variant as btnVariant } from "constants/variant";
+import React from "react";
+import tw from "tailwind-styled-components";
 
 const defaultProps = {
   type: "button",
-  variant: "primary",
-  value: "Click me!",
+  variant: btnVariant.PRIMARY,
+  text: "Click me!",
 };
 
 const VariantButton = ({ type, variant, text, ...props }) => {
@@ -17,7 +16,7 @@ const VariantButton = ({ type, variant, text, ...props }) => {
   );
 };
 
-const StyledButton = tw.button`py-1.5 px-3 m-1.5 rounded
+const StyledButton = tw.button`py-1.5 px-3 m-1.5 rounded 
 ${({ variant }) => {
   switch (variant) {
     case btnVariant.PRIMARY:

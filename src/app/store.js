@@ -4,6 +4,8 @@ import { createLogger } from "redux-logger";
 import userReducer from "features/userSlice";
 import channelsReducer from "features/channelsSlice";
 import messagesReducer from "features/messagesSlice";
+import categoriesReducer from "features/categoriesSlice";
+import articlesReducer from "features/articlesSlice";
 import API from "utils/API";
 import immutableStateInvariantMiddleware from "redux-immutable-state-invariant";
 
@@ -54,6 +56,8 @@ const reducer = combineReducers({
   user: userReducer,
   channels: channelsReducer,
   messages: messagesReducer,
+  categories: categoriesReducer,
+  articles: articlesReducer,
 });
 
 const middleware = [];

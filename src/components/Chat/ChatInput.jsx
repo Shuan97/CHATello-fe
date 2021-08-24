@@ -26,8 +26,11 @@ const ChatInput = ({ channelName }) => {
   };
 
   useEffect(() => {
-    // setSocket(io("https://chatello.herokuapp.com"));
-    setSocket(io("http://localhost:3200"));
+    if (process.env.NODE_ENV === "development") {
+      setSocket(io("http://localhost:3200"));
+    } else {
+      setSocket(io("https://chatello.herokuapp.com"));
+    }
   }, []);
 
   useEffect(() => {

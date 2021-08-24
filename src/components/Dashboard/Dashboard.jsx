@@ -84,6 +84,6 @@ const Block = styled.div.attrs({
 `;
 
 const Header = tw.div`flex-center flex-1 w-full`;
-const Label = tw.h4`flex-center my-4 text-white text-4xl`;
+const Label = tw.h4`flex-center my-4 text-white text-4xl text-center`;
 
 export default Dashboard;

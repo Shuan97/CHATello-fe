@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl;
+  }
+
+  h3 {
+    @apply text-xl;
+  }
+
+  h4 {
+    @apply text-lg;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold;
+  }
+
+  a {
+    @apply text-blue-500;
+  }
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -44,6 +75,26 @@ path {
     color linear 100ms,
     box-shadow linear 100ms,
     transform 100ms linear;
+}
+
+a,
+button,
+div,
+input,
+label,
+select,
+span,
+strong,
+textarea {
+  outline: 0;
+}
+
+blockquote {
+  background: #404040;
+  border-left: 10px solid #FFAA32;
+  margin: 1.5rem 0.75rem;
+  padding: 0.5rem 1rem;
+  quotes: "\201C""\201D""\2018""\2019";
 }
 
 ::-webkit-scrollbar {

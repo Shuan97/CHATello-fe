@@ -1,6 +1,9 @@
 import Dashboard from "components/Dashboard/Dashboard";
+import Article from "components/KnowledgeCenter/Article";
+import ArticleList from "components/KnowledgeCenter/ArticleList";
+import KnowledgeCenter from "components/KnowledgeCenter/KnowledgeCenter";
 import Navbar from "components/Navbar/Navbar";
-import React, { useEffect } from "react";
+import React from "react";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import Chat from "./Chat/Chat";
@@ -14,8 +17,14 @@ const Layout = () => {
           <Route exact path='/chat'>
             <Chat />
           </Route>
+          <Route exact path='/knowledge_center/article/:articleUUID'>
+            <Article />
+          </Route>
+          <Route exact path='/knowledge_center/:categoryUUID'>
+            <ArticleList />
+          </Route>
           <Route exact path='/knowledge_center'>
-            Hello KC
+            <KnowledgeCenter />
           </Route>
           <Route exact path='/'>
             <Dashboard />
@@ -30,6 +39,8 @@ const Layout = () => {
 const Main = styled.main`
   display: flex;
   height: calc(100% - 64px);
+  overflow: auto;
+
   > * {
     flex: 1 100%;
   }

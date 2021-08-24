@@ -1,8 +1,20 @@
 import React from "react";
 import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { historyLink } from "utils/history";
+import WidgetsIcon from "@material-ui/icons/Widgets";
+import { Spacer } from "components/common/Heading";
 
 const Navbar = () => {
-  return <StyledNavbar>Hello Navbar!</StyledNavbar>;
+  return (
+    <StyledNavbar>
+      Hello Navbar!
+      <Spacer />
+      <Link to={historyLink("/")}>
+        <WidgetsIcon />
+      </Link>
+    </StyledNavbar>
+  );
 };
 
 const StyledNavbar = styled.nav`
