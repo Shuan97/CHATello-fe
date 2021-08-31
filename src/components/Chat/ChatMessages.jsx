@@ -9,7 +9,6 @@ const ChatMessages = () => {
   const messagesWrapperRef = useRef();
 
   useEffect(() => {
-    console.log("message arrived", messagesWrapperRef);
     messagesWrapperRef.current.scrollTop =
       messagesWrapperRef.current.scrollHeight;
   }, [messages]);

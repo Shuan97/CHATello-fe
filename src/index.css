@@ -31,6 +31,10 @@
   a {
     @apply text-blue-500;
   }
+
+  pre {
+    @apply bg-eerie-300 p-4 my-4;
+  }
 }
 
 * {

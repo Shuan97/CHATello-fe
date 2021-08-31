@@ -1,21 +1,21 @@
 import { Avatar } from "@material-ui/core";
-import React from "react";
-import styled from "styled-components/macro";
-import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import HeadsetRoundedIcon from "@material-ui/icons/HeadsetRounded";
+import MicRoundedIcon from "@material-ui/icons/MicRounded";
 import SettingsRoundedIcon from "@material-ui/icons/SettingsRounded";
-import { selectUser } from "../../../features/userSlice";
+import React from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components/macro";
+import { selectUser } from "../../../features/userSlice";
 
 const SidebarProfile = () => {
   const user = useSelector(selectUser);
 
   return (
     <StyledSidebarProfile>
-      <Avatar src={user?.photo} onClick={() => null} />
+      <Avatar src={`${user?.image}`} onClick={() => null} />
       <ProfileInfo>
-        <h3>{user?.displayName}</h3>
-        <p>Shuan#0000</p>
+        <h3>{user?.name}</h3>
+        <p>{user?.nickname}#0000</p>
       </ProfileInfo>
       <ProfileIcons>
         <MicRoundedIcon />

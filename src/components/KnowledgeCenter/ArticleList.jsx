@@ -4,13 +4,14 @@ import TextInput from "components/common/Form/TextInput";
 import Modal from "components/common/Modal/Modal";
 import VariantButton from "components/common/VariantButton";
 import ArticleListItem from "components/KnowledgeCenter/ArticleListItem";
-import { SizeEnum } from "constants/enums";
+import { RoleEnum, SizeEnum } from "constants/enums";
 import { variant } from "constants/variant";
 import { createArticle } from "features/articlesSlice";
 import {
   fetchCategoryByUUID,
   selectCategoryWithArticles,
 } from "features/categoriesSlice";
+import { selectUser } from "features/userSlice";
 import { Form, Formik } from "formik";
 import React, { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
@@ -30,24 +31,28 @@ const ArticleList = () => {
   const { name, description, articles } = useSelector(
     selectCategoryWithArticles
   );
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     dispatch(fetchCategoryByUUID({ categoryUUID: categoryUUID }));
   }, []);
 
   const renderArticles = () => {
-    if (!categoryUUID && !name && articles.length < 1) {
+    if (articles === undefined || articles.length < 1) {
       return <div>No articles found</div>;
     }
-    return articles.map((article) => (
-      <Link
-        key={article.UUID}
-        to={historyLink(`/knowledge_center/article/${article.UUID}`)}
-        className={`${article.title.length > 64 ? "flex-basis-600" : ""}`}
-      >
-        <ArticleListItem article={article} />
-      </Link>
-    ));
+    return (
+      !!articles &&
+      articles.map((article) => (
+        <Link
+          key={article.UUID}
+          to={historyLink(`/knowledge_center/article/${article.UUID}`)}
+          className={`${article.title.length > 64 ? "flex-basis-600" : ""}`}
+        >
+          <ArticleListItem article={article} />
+        </Link>
+      ))
+    );
   };
 
   return (
@@ -56,11 +61,13 @@ const ArticleList = () => {
         <HeaderWrapper>
           <Heading>{name}</Heading>
           <Spacer />
-          <VariantButton
-            text='Add'
-            variant={variant.SUCCESS}
-            onClick={() => setShowModal(true)}
-          />
+          {user && user.role === RoleEnum.ADMIN && (
+            <VariantButton
+              text='Add'
+              variant={variant.SUCCESS}
+              onClick={() => setShowModal(true)}
+            />
+          )}
         </HeaderWrapper>
         <Description>{description}</Description>
         <List>{renderArticles()}</List>

@@ -3,7 +3,9 @@ import Article from "components/KnowledgeCenter/Article";
 import ArticleList from "components/KnowledgeCenter/ArticleList";
 import KnowledgeCenter from "components/KnowledgeCenter/KnowledgeCenter";
 import Navbar from "components/Navbar/Navbar";
-import TasksList from "components/Tasks/TasksList";
+import QuestionsCategoriesList from "components/Questions/QuestionsCategoriesList";
+import QuestionsSet from "components/Questions/QuestionsSet";
+import QuestionsSetsList from "components/Questions/QuestionsSetsList";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import styled from "styled-components";
@@ -13,7 +15,7 @@ const Layout = () => {
   return (
     <StyledLayout id='layout'>
       <Navbar />
-      <Main>
+      <Main id='main-content'>
         <Switch>
           <Route exact path='/chat'>
             <Chat />
@@ -27,8 +29,14 @@ const Layout = () => {
           <Route exact path='/knowledge_center'>
             <KnowledgeCenter />
           </Route>
-          <Route exact path='/tasks'>
-            <TasksList />
+          <Route exact path='/test_your_knowledge'>
+            <QuestionsCategoriesList />
+          </Route>
+          <Route exact path='/test_your_knowledge/:categoryUUID'>
+            <QuestionsSetsList />
+          </Route>
+          <Route exact path='/questions_set/:setUUID'>
+            <QuestionsSet />
           </Route>
           <Route exact path='/'>
             <Dashboard />

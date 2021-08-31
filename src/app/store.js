@@ -6,6 +6,7 @@ import channelsReducer from "features/channelsSlice";
 import messagesReducer from "features/messagesSlice";
 import categoriesReducer from "features/categoriesSlice";
 import articlesReducer from "features/articlesSlice";
+import setsReducer from "features/setsSlice";
 import API from "utils/API";
 import immutableStateInvariantMiddleware from "redux-immutable-state-invariant";
 
@@ -58,6 +59,7 @@ const reducer = combineReducers({
   messages: messagesReducer,
   categories: categoriesReducer,
   articles: articlesReducer,
+  sets: setsReducer,
 });
 
 const middleware = [];

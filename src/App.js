@@ -1,10 +1,9 @@
 import Loader from "components/common/Loader";
 import PrivateRoute from "components/common/PrivateRoute";
-import Dashboard from "components/Dashboard/Dashboard";
 import { isEmpty } from "lodash";
-import React, { useEffect, Suspense, lazy } from "react";
+import React, { lazy, Suspense, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Redirect, Route, Switch, useHistory } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styled, { ThemeProvider } from "styled-components/macro";
