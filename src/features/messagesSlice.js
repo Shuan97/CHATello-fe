@@ -21,7 +21,6 @@ export const messagesSlice = createSlice({
   },
   reducers: {
     pushNewMessage: (state, action) => {
-      console.log("Push to array");
       state.messages = [...state.messages, action.payload];
     },
   },

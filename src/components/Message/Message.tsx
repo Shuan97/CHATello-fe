@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
-import styled from "styled-components/macro";
 import { Avatar } from "@material-ui/core";
 import { selectUser } from "features/userSlice";
+import React from "react";
 import { useSelector } from "react-redux";
+import styled from "styled-components/macro";
 
 interface IMessageProps {
   message: any;
@@ -24,7 +24,7 @@ const Message: React.FC<IMessageProps> = ({ message }) => {
     <MessageListItem>
       {!!message.user && (
         <MessageContainer isUserMessage={isUserMessage()}>
-          <Avatar src='https://avatars.githubusercontent.com/u/35654946?s=460&u=177d19ab4fef81db30b3bc104be0871e00818822&v=4' />
+          <Avatar src={message.user?.image} />
           <MessageWrapper>
             <MessageHeader>
               <MessageLabel

@@ -1,14 +1,20 @@
 import { selectMessages } from "features/messagesSlice";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components/macro";
 import Message from "../Message/Message";
 
 const ChatMessages = () => {
   const messages = useSelector(selectMessages);
+  const messagesWrapperRef = useRef();
+
+  useEffect(() => {
+    messagesWrapperRef.current.scrollTop =
+      messagesWrapperRef.current.scrollHeight;
+  }, [messages]);
 
   return (
-    <StyledChatMessages>
+    <StyledChatMessages role='log' ref={messagesWrapperRef}>
       <MessagesWrapper>
         {messages &&
           messages.length > 0 &&

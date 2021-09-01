@@ -1,5 +1,6 @@
 {
   "name": "app-fe",
+  "homepage": "http://dev.lunatri.com/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
