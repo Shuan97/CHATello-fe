@@ -87,7 +87,7 @@ export class PeerConnection {
 
     if (signal.displayName && signal.dest == "all") {
       // set up peer connection object for a newcomer peer
-      console.log("Setting up peer connection");
+      // console.log("Setting up peer connection");
       this.setUpPeer(peerUuid, signal.displayName);
       this.socket.emit(
         "peer-connection",
@@ -99,7 +99,7 @@ export class PeerConnection {
       );
     } else if (signal.displayName && signal.dest == this.user.UUID) {
       // initiate call if we are the newcomer peer
-      console.log("Starting call");
+      // console.log("Starting call");
       this.setUpPeer(peerUuid, signal.displayName, true);
     } else if (signal.sdp) {
       this._peerConnections[peerUuid].pc
@@ -126,7 +126,7 @@ export class PeerConnection {
 
   setUpPeer(peerUuid, displayName, initCall = false) {
     try {
-      console.log("setUpPeer");
+      // console.log("setUpPeer");
       this._peerConnections[peerUuid] = {
         displayName: displayName,
         pc: new RTCPeerConnection(this._peerConnectionConfig),
@@ -152,7 +152,7 @@ export class PeerConnection {
   }
 
   gotIceCandidate(event, peerUuid) {
-    console.log(`gotIceCandidate`);
+    // console.log(`gotIceCandidate`);
     if (event.candidate != null) {
       this.socket.emit(
         "peer-connection",
@@ -211,6 +211,7 @@ export class PeerConnection {
   }
 
   checkPeerDisconnect(event, peerUuid) {
+    console.log(`check peer disconnect`);
     var state = this._peerConnections[peerUuid].pc.iceConnectionState;
     console.log(`connection with peer ${peerUuid} ${state}`);
     if (state === "failed" || state === "closed" || state === "disconnected") {

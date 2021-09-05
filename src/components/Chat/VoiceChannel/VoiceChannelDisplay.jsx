@@ -1,5 +1,7 @@
 import { SocketContext } from "components/Chat/VoiceChannel/VoiceChannelContextProvider";
+import { selectUser } from "features/userSlice";
 import React, { useContext, useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
@@ -8,6 +10,7 @@ const VoiceChannelDisplay = ({ channelUUID, channelName }) => {
     SocketContext
   );
 
+  const { name } = useSelector(selectUser);
   const myVideo = useRef();
 
   useEffect(() => {
@@ -47,7 +50,7 @@ const VoiceChannelDisplay = ({ channelUUID, channelName }) => {
       <Videos id='videos'>
         <VideoContainer>
           {stream && <Video ref={myVideo} autoPlay playsInline muted />}
-          <VideoDescription>Test</VideoDescription>
+          <VideoDescription>{name}</VideoDescription>
         </VideoContainer>
         {/* <VideoContainer>
           {stream && <Video ref={myVideo} autoPlay playsInline muted />}

@@ -10,7 +10,7 @@ import styled from "styled-components/macro";
 
 const getHostUrl = () => {
   if (process.env.NODE_ENV === "development") {
-    return "http://localhost:3200";
+    return "https://192.168.0.178:3200";
   } else {
     return "https://chatello.herokuapp.com";
   }
