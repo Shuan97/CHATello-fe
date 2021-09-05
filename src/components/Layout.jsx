@@ -1,3 +1,4 @@
+import VoiceChannelContextProvider from "components/Chat/VoiceChannel/VoiceChannelContextProvider";
 import Dashboard from "components/Dashboard/Dashboard";
 import Article from "components/KnowledgeCenter/Article";
 import ArticleList from "components/KnowledgeCenter/ArticleList";

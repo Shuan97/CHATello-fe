@@ -5,7 +5,11 @@ export const fetchMessagesByChannel = createAsyncThunk(
   "messages/fetchMessagesByChannel",
   (_, { extra, rejectWithValue, getState }) => {
     const { channels } = getState();
-    return extra.API.get(`channels/${channels.channelUUID}/messages`)
+    const channelUUID = channels.currentChannel.UUID;
+    if (!channelUUID) {
+      console.error(`ChannelUUID is ${channelUUID}`);
+    }
+    return extra.API.get(`channels/${channelUUID}/messages`)
       .then((response) => response.data)
       .catch((error) => rejectWithValue(error.response.data));
   }

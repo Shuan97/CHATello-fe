@@ -1,9 +1,9 @@
 import ChatNavbar from "components/Chat/ChatNavbar";
 import ChatSidebar from "components/Chat/ChatSidebar/ChatSidebar";
+import VoiceChannelDisplay from "components/Chat/VoiceChannel/VoiceChannelDisplay";
 import {
   fetchTextChannels,
-  selectChannelName,
-  selectChannelUUID,
+  selectCurrentChannel,
 } from "features/channelsSlice";
 import { fetchMessagesByChannel } from "features/messagesSlice";
 import React, { useEffect } from "react";
@@ -15,25 +15,37 @@ import ChatMessages from "./ChatMessages";
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const channelUUID = useSelector(selectChannelUUID);
-  const channelName = useSelector(selectChannelName);
+  const { UUID, name, type } = useSelector(selectCurrentChannel);
 
   useEffect(() => {
-    if (!channelUUID) {
+    if (!UUID) {
       dispatch(fetchTextChannels());
     } else {
       dispatch(fetchMessagesByChannel());
     }
-  }, [dispatch, channelUUID]);
+  }, [dispatch, UUID]);
+
+  const renderChat = () => {
+    if (type === "TEXT") {
+      return (
+        <>
+          <ChatMessages />
+          <ChatInput channelUUID={UUID} channelName={name} />
+        </>
+      );
+    }
+    if (type === "VOICE") {
+      return <VoiceChannelDisplay channelUUID={UUID} channelName={name} />;
+    }
+  };
 
   return (
     <StyledChat>
       <ChatNavbar />
       <ChatSidebar />
       <MainChat>
-        <ChatHeader channelName={channelName} />
-        <ChatMessages />
-        <ChatInput channelUUID={channelUUID} channelName={channelName} />
+        <ChatHeader channelName={name} />
+        {renderChat()}
       </MainChat>
     </StyledChat>
   );

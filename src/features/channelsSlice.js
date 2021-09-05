@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ChannelTypeEnum } from "constants/enums";
 import { thunkStatus } from "constants/status";
 
 export const fetchTextChannels = createAsyncThunk(
@@ -10,9 +11,10 @@ export const fetchTextChannels = createAsyncThunk(
 );
 export const createChannel = createAsyncThunk(
   "channels/createChannel",
-  ({ name }, { extra, rejectWithValue }) =>
+  ({ name, type }, { extra, rejectWithValue }) =>
     extra.API.post("channels/new", {
       name: name,
+      type: type,
     })
       .then((response) => response.data)
       .catch((error) => rejectWithValue(error.response.data))
@@ -23,28 +25,52 @@ export const channelsSlice = createSlice({
   initialState: {
     channelUUID: null,
     channelName: null,
+    currentChannel: {},
     textChannels: [],
+    voiceChannels: [],
     requestStatus: {
       textChannels: thunkStatus.DEFAULT,
+      voiceChannels: thunkStatus.DEFAULT,
     },
   },
   reducers: {
     setChannelInfo: (state, action) => {
-      state.channelUUID = action.payload.channelUUID;
-      state.channelName = action.payload.channelName;
+      const { UUID, name, type } = action.payload;
+      state.currentChannel = { UUID, name, type };
+    },
+    setChannelParticipants: (state, action) => {
+      // const data = action.payload
+      const { participants } = action.payload;
+      console.log("Slice participants", participants);
+      // const { clientId, userName, userUUID } = action.payload;
+      state.voiceChannels.forEach((channel) => {
+        channel.participants = participants.filter(
+          (participant) => channel.UUID === participant.channelUUID
+        );
+        // .map((p) => p);
+      });
     },
   },
   extraReducers: {
     // fetchTextChannels
     [fetchTextChannels.pending]: (state, action) => {
       state.requestStatus.textChannels = action.meta.requestStatus;
+      state.requestStatus.voiceChannels = action.meta.requestStatus;
     },
     [fetchTextChannels.fulfilled]: (state, action) => {
-      state.textChannels = action.payload;
+      const data = action.payload;
+      state.textChannels = data.filter(
+        (channel) => channel.type === ChannelTypeEnum.TEXT
+      );
+      state.voiceChannels = data.filter(
+        (channel) => channel.type === ChannelTypeEnum.VOICE
+      );
       state.requestStatus.textChannels = action.meta.requestStatus;
+      state.requestStatus.voiceChannels = action.meta.requestStatus;
     },
     [fetchTextChannels.rejected]: (state, action) => {
       state.requestStatus.textChannels = action.meta.requestStatus;
+      state.requestStatus.voiceChannels = action.meta.requestStatus;
     },
     // createChannel
     [createChannel.pending]: (state, action) => {
@@ -60,12 +86,15 @@ export const channelsSlice = createSlice({
   },
 });
 
-export const { setChannelInfo } = channelsSlice.actions;
+export const { setChannelInfo, setChannelParticipants } = channelsSlice.actions;
 
-export const selectChannelUUID = (state) => state.channels.channelUUID;
-export const selectChannelName = (state) => state.channels.channelName;
+export const selectCurrentChannel = (state) => state.channels.currentChannel;
 export const selectTextChannels = (state) => {
   let x = state.channels?.textChannels;
+  return x.slice().sort((a, b) => (a.name > b.name ? 1 : -1));
+};
+export const selectVoiceChannels = (state) => {
+  let x = state.channels?.voiceChannels;
   return x.slice().sort((a, b) => (a.name > b.name ? 1 : -1));
 };
 

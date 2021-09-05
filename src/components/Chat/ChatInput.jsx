@@ -1,17 +1,25 @@
 import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import EmojiEmotionsRoundedIcon from "@material-ui/icons/EmojiEmotionsRounded";
 import GifRoundedIcon from "@material-ui/icons/GifRounded";
-import { selectChannelUUID } from "features/channelsSlice";
+import { selectCurrentChannel } from "features/channelsSlice";
 import { pushNewMessage } from "features/messagesSlice";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
 import styled from "styled-components/macro";
 
+const getHostUrl = () => {
+  if (process.env.NODE_ENV === "development") {
+    return "http://localhost:3200";
+  } else {
+    return "https://chatello.herokuapp.com";
+  }
+};
+
 /* eslint-disable react/prop-types */
 const ChatInput = ({ channelName }) => {
   const dispatch = useDispatch();
-  const channelUUID = useSelector(selectChannelUUID);
+  const { UUID: channelUUID } = useSelector(selectCurrentChannel);
   const [socket, setSocket] = useState(null);
   const [input, setInput] = useState("");
 
@@ -26,18 +34,16 @@ const ChatInput = ({ channelName }) => {
   };
 
   useEffect(() => {
-    if (process.env.NODE_ENV === "development") {
-      setSocket(io("http://localhost:3200"));
-    } else {
-      setSocket(io("https://chatello.herokuapp.com"));
-    }
+    setSocket(io(`${getHostUrl()}/messages`));
+    return () => {
+      setSocket(null);
+    };
   }, []);
 
   useEffect(() => {
     if (!!socket && !!channelUUID) {
       socket.off();
       socket.on(`messageToChannel=${channelUUID}`, (message) => {
-        console.log(message);
         dispatch(pushNewMessage(message));
       });
       // socket.on(

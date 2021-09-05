@@ -1,10 +1,15 @@
 import AddRoundedIcon from "@material-ui/icons/AddRounded";
 import ExpandMoreRoundedIcon from "@material-ui/icons/ExpandMoreRounded";
+import VoiceChannelItem from "components/Chat/VoiceChannel/VoiceChannelItem";
 import TextInput from "components/common/Form/TextInput";
 import Modal from "components/common/Modal/Modal";
 import VariantButton from "components/common/VariantButton";
 import { variant } from "constants/variant";
-import { createChannel, selectTextChannels } from "features/channelsSlice";
+import {
+  createChannel,
+  selectTextChannels,
+  selectVoiceChannels,
+} from "features/channelsSlice";
 import { selectUser } from "features/userSlice";
 import { Form, Formik } from "formik";
 import React, { useState } from "react";
@@ -25,12 +30,13 @@ const voiceChannelContext = {
 
 const SidebarContent = () => {
   const dispatch = useDispatch();
-  const channels = useSelector(selectTextChannels);
+  const textChannels = useSelector(selectTextChannels);
+  const voiceChannels = useSelector(selectVoiceChannels);
   const user = useSelector(selectUser);
   const [showModal, setShowModal] = useState(false);
   const [modalContext, setModalContext] = useState({});
   const [textChannelsCollapse, setTextChannelsCollapse] = useState(false);
-  const [voiceChannelsCollapse, setVoiceChannelsCollapse] = useState(true);
+  const [voiceChannelsCollapse, setVoiceChannelsCollapse] = useState(false);
 
   const [validationSchema] = useState(
     Yup.object().shape({
@@ -89,14 +95,23 @@ const SidebarContent = () => {
       </ChannelHeaderWrapper>
       {!textChannelsCollapse && (
         <ChannelsList>
-          {channels &&
-            channels.length > 0 &&
-            channels.map(({ UUID, name }) => (
-              <SidebarChannel key={UUID} id={UUID} channelName={name} />
-            ))}
+          {textChannels &&
+            textChannels.length > 0 &&
+            textChannels.map(({ UUID, name, type }) => {
+              if (type === "TEXT") {
+                return (
+                  <SidebarChannel
+                    key={UUID}
+                    id={UUID}
+                    channelName={name}
+                    channelType={type}
+                  />
+                );
+              }
+            })}
         </ChannelsList>
       )}
-
+      <hr className='my-4 border-eerie-100' />
       <ChannelHeaderWrapper>
         <ChannelHeader>
           <ExpandMoreRoundedIcon
@@ -113,7 +128,25 @@ const SidebarContent = () => {
           />
         )}
       </ChannelHeaderWrapper>
-      {!voiceChannelsCollapse && <ChannelsList>Voice [WIP]</ChannelsList>}
+      {!voiceChannelsCollapse && (
+        <ChannelsList>
+          {voiceChannels &&
+            voiceChannels.length > 0 &&
+            voiceChannels.map(({ UUID, name, type, participants }) => {
+              if (type === "VOICE") {
+                return (
+                  <VoiceChannelItem
+                    key={UUID}
+                    id={UUID}
+                    channelName={name}
+                    channelType={type}
+                    participants={participants}
+                  />
+                );
+              }
+            })}
+        </ChannelsList>
+      )}
       <Formik
         initialValues={{
           channelName: "",
@@ -169,7 +202,7 @@ const StyledSidebarContent = styled.div`
 const ChannelHeaderWrapper = styled.div`
   display: flex;
   padding: 0.5rem;
-  color: ${({ theme }) => theme.textSecondary};
+  color: ${({ theme }) => theme.textPrimary};
 
   svg {
     transition: font-size 100ms linear, color 100ms linear;
@@ -182,7 +215,7 @@ const ChannelHeader = styled.div`
   flex: 1;
 
   h2 {
-    font-size: 0.875rem;
+    font-size: 1rem;
     margin-left: 0.5rem;
   }
 `;

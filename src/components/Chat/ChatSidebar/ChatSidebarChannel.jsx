@@ -2,8 +2,9 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
 import { setChannelInfo } from "features/channelsSlice";
+import ChatIcon from "@material-ui/icons/Chat";
 
-const SidebarChannel = ({ id, channelName }) => {
+const SidebarChannel = ({ id, channelName, channelType }) => {
   const dispatch = useDispatch();
 
   return (
@@ -11,14 +12,15 @@ const SidebarChannel = ({ id, channelName }) => {
       onClick={() =>
         dispatch(
           setChannelInfo({
-            channelUUID: id,
-            channelName: channelName,
+            UUID: id,
+            name: channelName,
+            type: channelType,
           })
         )
       }
     >
       <ChannelLabel>
-        <span>#</span>
+        <ChatIcon className='mr-2' />
         {channelName}
       </ChannelLabel>
     </StyledSidebarChannel>
@@ -36,7 +38,7 @@ const StyledSidebarChannel = styled.div`
 const ChannelLabel = styled.h4`
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
+  font-size: 1rem;
   color: ${({ theme }) => theme.textSecondary};
 
   ${StyledSidebarChannel}:hover && {

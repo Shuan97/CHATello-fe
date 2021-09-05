@@ -9,3 +9,8 @@ export const SizeEnum = Object.freeze({
   LARGE: "large",
   FULL: "full",
 });
+
+export const ChannelTypeEnum = Object.freeze({
+  TEXT: "TEXT",
+  VOICE: "VOICE",
+});
