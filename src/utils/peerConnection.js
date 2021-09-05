@@ -117,7 +117,7 @@ export class PeerConnection {
         })
         .catch(this.errorHandler);
     } else if (signal.ice) {
-      console.log("signal ice", signal.ice);
+      // console.log("signal ice", signal.ice);
       this._peerConnections[peerUuid].pc
         .addIceCandidate(new RTCIceCandidate(signal.ice))
         .catch(this.errorHandler);
