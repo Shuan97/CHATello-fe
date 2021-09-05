@@ -1,17 +1,13 @@
 import PersonIcon from "@material-ui/icons/Person";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
 import { setChannelInfo } from "features/channelsSlice";
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
 import tw from "tailwind-styled-components";
 
 const VoiceChannelItem = ({ id, channelName, channelType, participants }) => {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    console.log("Item participants", participants);
-  }, [participants]);
 
   return (
     <VoiceChannelWrapper>

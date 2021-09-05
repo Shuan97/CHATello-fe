@@ -16,13 +16,17 @@ const VoiceChannelDisplay = ({ channelUUID, channelName }) => {
       .getUserMedia({
         video: {
           width: { min: 640, ideal: 1920 },
-          height: { min: 360, ideal: 1080 },
+          height: { min: 480, ideal: 1080 },
           aspectRatio: { ideal: 1.7777777778 },
         },
+        // video: true,
         audio: true,
       })
       .then((currentStream) => {
         !stream && setStream(currentStream);
+      })
+      .catch((err) => {
+        console.error(err);
       });
 
     return () => {
@@ -40,9 +44,10 @@ const VoiceChannelDisplay = ({ channelUUID, channelName }) => {
 
   return (
     <VideosWrapper>
-      <Videos>
+      <Videos id='videos'>
         <VideoContainer>
           {stream && <Video ref={myVideo} autoPlay playsInline muted />}
+          <VideoDescription>Test</VideoDescription>
         </VideoContainer>
         {/* <VideoContainer>
           {stream && <Video ref={myVideo} autoPlay playsInline muted />}
@@ -66,12 +71,26 @@ const VideoContainer = tw.div`flex-center relative overflow-hidden p-2`;
 const Video = styled.video.attrs({
   className: "box-shadow",
 })`
+  position: relative;
   width: 100%;
   height: 100%;
   margin: 8px;
   border: 2px solid #1b1b1b;
   border-radius: 12px;
   object-fit: cover;
+`;
+const VideoDescription = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  background: #2c2c2c;
+  color: #ececec;
+  margin: 8px;
+  border: 2px solid #1b1b1b;
+  border-bottom-left-radius: 12px;
+  border-top-right-radius: 12px;
+  padding: 8px 16px;
+  font-weight: bold;
 `;
 
 export default VoiceChannelDisplay;

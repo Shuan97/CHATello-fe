@@ -57,7 +57,8 @@
   },
   "scripts": {
     "start": "craco start",
-    "start:dev": "craco start",
+    "start:dev": "set HTTPS=true&&craco start",
+    "start:https": "set HTTPS=true&&react-scripts start",
     "build": "craco build",
     "test": "craco test",
     "eject": "react-scripts eject"

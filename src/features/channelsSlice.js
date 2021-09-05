@@ -39,15 +39,11 @@ export const channelsSlice = createSlice({
       state.currentChannel = { UUID, name, type };
     },
     setChannelParticipants: (state, action) => {
-      // const data = action.payload
       const { participants } = action.payload;
-      console.log("Slice participants", participants);
-      // const { clientId, userName, userUUID } = action.payload;
       state.voiceChannels.forEach((channel) => {
         channel.participants = participants.filter(
           (participant) => channel.UUID === participant.channelUUID
         );
-        // .map((p) => p);
       });
     },
   },

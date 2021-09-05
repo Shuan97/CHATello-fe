@@ -3,6 +3,7 @@ import { selectUser } from "features/userSlice";
 import React, { createContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import io from "socket.io-client";
+import { PeerConnection } from "utils/peerConnection";
 
 const SocketContext = createContext();
 
@@ -19,10 +20,13 @@ const getHostUrl = () => {
 let _stream = null;
 
 const VoiceChannelContextProvider = ({ children }) => {
+  // const peerConnection = new PeerConnection();
+
   const [stream, setStream] = useState(null);
   const [joinedCall, setJoinedCall] = useState(false);
   const [me, setMe] = useState("");
   const [room, setRoom] = useState(null);
+  const [peerConnection, setPeerConnection] = useState(null);
   const user = useSelector(selectUser);
   const dispatch = useDispatch();
 
@@ -38,22 +42,57 @@ const VoiceChannelContextProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (!!socket) {
-      socket.on("me", (id) => {
-        setMe(id);
-        console.log("Me id: ", id);
-      });
-      socket.on("update-user-list", (data) => {
-        console.log("update data", data);
+    if (!socket || !user) return;
+    console.log("PeerConnection");
+    setPeerConnection(new PeerConnection(user, socket));
+  }, [socket, user]);
+
+  useEffect(() => {
+    if (!stream) return;
+    peerConnection.setLocalStream(stream);
+  }, [stream]);
+
+  useEffect(() => {
+    if (!socket || !user || !stream) return;
+    // socket.emit(
+    //   "peer-connection",
+    //   JSON.stringify({
+    //     displayName: user.name,
+    //     uuid: user.UUID,
+    //     dest: "all",
+    //   })
+    // );
+  }, [socket, user, stream]);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("me", (id) => {
+      setMe(id);
+      console.log("Me id: ", id);
+    });
+    socket.on("update-user-list", (data) => {
+      console.log("update-user-list: ", data);
+      setTimeout(() => {
         dispatch(
           setChannelParticipants({
             participants: data.users,
           })
         );
-        console.log("update-user-list: ", data);
-      });
-    }
+      }, 100);
+    });
+    socket.on("user-joined-channel", (data) => {
+      console.log("user-joined-channel: ", data);
+      // peerConnection.gotMessageFromServer(data);
+    });
   }, [socket]);
+
+  useEffect(() => {
+    if (!socket || !peerConnection) return;
+    socket.on("peer-connection", (data) => {
+      // console.log("peer-connection: ", data);
+      peerConnection.gotMessageFromServer(data);
+    });
+  }, [peerConnection]);
 
   const stopBothVideoAndAudio = () => {
     !!_stream &&
@@ -73,6 +112,14 @@ const VoiceChannelContextProvider = ({ children }) => {
       userUUID: user.UUID,
       userName: user.name,
     });
+    socket.emit(
+      "peer-connection",
+      JSON.stringify({
+        displayName: user.name,
+        uuid: user.UUID,
+        dest: "all",
+      })
+    );
   };
 
   const disconnectChannel = ({ channelUUID, channelName }) => {
