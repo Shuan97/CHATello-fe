@@ -77,9 +77,6 @@ const SidebarContent = () => {
       <ChannelHeaderWrapper>
         <ChannelHeader>
           <ExpandMoreRoundedIcon
-            // classes={{
-            //   root: "transform -rotate-90 bg-red-500",
-            // }}
             className={`${textChannelsCollapse && "transform -rotate-90"}`}
             onClick={() => setTextChannelsCollapse((value) => !value)}
           />

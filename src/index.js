@@ -7,15 +7,15 @@ import { Provider } from "react-redux";
 import * as serviceWorker from "./serviceWorker";
 import { Router } from "react-router-dom";
 import history from "utils/history";
-import VoiceChannelContextProvider from "components/Chat/VoiceChannel/VoiceChannelContextProvider";
+import VoiceContextProvider from "components/Chat/VoiceChannel/VoiceContextProvider";
 
 ReactDOM.render(
   <React.StrictMode>
     <Router history={history}>
       <Provider store={store}>
-        <VoiceChannelContextProvider>
+        <VoiceContextProvider>
           <App />
-        </VoiceChannelContextProvider>
+        </VoiceContextProvider>
       </Provider>
     </Router>
   </React.StrictMode>,

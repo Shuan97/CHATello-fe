@@ -41,33 +41,12 @@ export class PeerConnection {
     ],
   };
   _peerConnections = {};
-  // localStream = localStream;
   localStream = getLocalStream();
   socket = null;
 
   constructor(user, socket) {
     this.user = user;
     this.socket = socket;
-    // this.localStream = localStream;
-
-    // this.constraints = {
-    //   video: {
-    //     width: { max: 320 },
-    //     height: { max: 240 },
-    //     frameRate: { max: 30 },
-    //   },
-    //   audio: false,
-    // };
-
-    // if (navigator.mediaDevices.getUserMedia) {
-    //   navigator.mediaDevices
-    //     .getUserMedia(this.constraints)
-    //     .then((stream) => {
-    //       this.localStream = stream;
-    //       // document.getElementById("localVideo").srcObject = stream;
-    //     })
-    //     .catch(this.errorHandler);
-    // }
   }
 
   setLocalStream(stream) {
@@ -140,7 +119,7 @@ export class PeerConnection {
       this._peerConnections[peerUuid].pc.addStream(localStream);
 
       if (initCall) {
-        console.log("initCall");
+        // console.log("initCall");
         this._peerConnections[peerUuid].pc
           .createOffer()
           .then((description) => this.createdDescription(description, peerUuid))
@@ -166,8 +145,7 @@ export class PeerConnection {
   }
 
   createdDescription(description, peerUuid) {
-    console.log(`got description, peer ${peerUuid}`);
-    console.log(this.socket);
+    // console.log(`got description, peer ${peerUuid}`);
     this._peerConnections[peerUuid].pc
       .setLocalDescription(description)
       .then(() => {
@@ -184,7 +162,7 @@ export class PeerConnection {
   }
 
   gotRemoteStream(event, peerUuid) {
-    console.log(`got remote stream, peer ${peerUuid}`);
+    // console.log(`got remote stream, peer ${peerUuid}`);
     if (document.getElementById("remoteVideo_" + peerUuid)) return;
     //assign stream to new HTML video element
     var vidElement = document.createElement("video");
@@ -211,10 +189,10 @@ export class PeerConnection {
   }
 
   checkPeerDisconnect(event, peerUuid) {
-    console.log(`check peer disconnect`);
     var state = this._peerConnections[peerUuid].pc.iceConnectionState;
-    console.log(`connection with peer ${peerUuid} ${state}`);
+    // console.log(`connection with peer ${peerUuid} ${state}`);
     if (state === "failed" || state === "closed" || state === "disconnected") {
+      console.log(`check peer disconnect`);
       delete this._peerConnections[peerUuid];
       document
         .getElementById("videos")

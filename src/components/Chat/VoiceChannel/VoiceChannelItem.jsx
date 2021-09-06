@@ -1,6 +1,6 @@
 import PersonIcon from "@material-ui/icons/Person";
 import VolumeUpIcon from "@material-ui/icons/VolumeUp";
-import { setChannelInfo } from "features/channelsSlice";
+import { setVoiceChannelInfo } from "features/channelsSlice";
 import React from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components/macro";
@@ -14,7 +14,7 @@ const VoiceChannelItem = ({ id, channelName, channelType, participants }) => {
       <StyledVoiceChannel
         onClick={() =>
           dispatch(
-            setChannelInfo({
+            setVoiceChannelInfo({
               UUID: id,
               name: channelName,
               type: channelType,

@@ -25,7 +25,9 @@ export const channelsSlice = createSlice({
   initialState: {
     channelUUID: null,
     channelName: null,
+    currentChannelContext: "",
     currentChannel: {},
+    currentVoiceChannel: {},
     textChannels: [],
     voiceChannels: [],
     requestStatus: {
@@ -37,6 +39,12 @@ export const channelsSlice = createSlice({
     setChannelInfo: (state, action) => {
       const { UUID, name, type } = action.payload;
       state.currentChannel = { UUID, name, type };
+      state.currentChannelContext = type;
+    },
+    setVoiceChannelInfo: (state, action) => {
+      const { UUID, name, type } = action.payload;
+      state.currentVoiceChannel = { UUID, name, type };
+      state.currentChannelContext = type;
     },
     setChannelParticipants: (state, action) => {
       const { participants } = action.payload;
@@ -82,9 +90,17 @@ export const channelsSlice = createSlice({
   },
 });
 
-export const { setChannelInfo, setChannelParticipants } = channelsSlice.actions;
+export const {
+  setChannelInfo,
+  setVoiceChannelInfo,
+  setChannelParticipants,
+} = channelsSlice.actions;
 
 export const selectCurrentChannel = (state) => state.channels.currentChannel;
+export const selectCurrentVoiceChannel = (state) =>
+  state.channels.currentVoiceChannel;
+export const selectCurrentChannelContext = (state) =>
+  state.channels.currentChannelContext;
 export const selectTextChannels = (state) => {
   let x = state.channels?.textChannels;
   return x.slice().sort((a, b) => (a.name > b.name ? 1 : -1));

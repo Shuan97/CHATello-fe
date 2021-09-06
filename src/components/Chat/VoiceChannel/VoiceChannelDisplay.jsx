@@ -1,56 +1,73 @@
-import { SocketContext } from "components/Chat/VoiceChannel/VoiceChannelContextProvider";
+import MicIcon from "@material-ui/icons/Mic";
+import MicOffIcon from "@material-ui/icons/MicOff";
+import { SocketContext } from "components/Chat/VoiceChannel/VoiceContextProvider";
+import { ChannelTypeEnum } from "constants/enums";
+import {
+  selectCurrentChannelContext,
+  selectCurrentVoiceChannel,
+} from "features/channelsSlice";
 import { selectUser } from "features/userSlice";
-import React, { useContext, useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-const VoiceChannelDisplay = ({ channelUUID, channelName }) => {
-  const { disconnectChannel, joinChannel, setStream, stream } = useContext(
-    SocketContext
-  );
+const VoiceChannelDisplay = () => {
+  const {
+    disconnectChannel,
+    joinedCall,
+    joinChannel,
+    setStream,
+    stream,
+  } = useContext(SocketContext);
+  const [mute, setMute] = useState(true);
 
+  const { UUID: channelUUID, name: channelName } = useSelector(
+    selectCurrentVoiceChannel
+  );
+  const channelContext = useSelector(selectCurrentChannelContext);
   const { name } = useSelector(selectUser);
   const myVideo = useRef();
 
   useEffect(() => {
     joinChannel({ channelUUID, channelName });
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          width: { min: 640, ideal: 1920 },
-          height: { min: 480, ideal: 1080 },
-          aspectRatio: { ideal: 1.7777777778 },
-        },
-        // video: true,
-        audio: true,
-      })
-      .then((currentStream) => {
-        !stream && setStream(currentStream);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
 
     return () => {
-      // stopBothVideoAndAudio();
-      disconnectChannel({ channelUUID, channelName });
+      // disconnectChannel({ channelUUID, channelName });
       console.log("Cleanup!");
     };
   }, [channelUUID]);
 
   useEffect(() => {
-    if (!!stream) {
-      myVideo.current.srcObject = stream;
-    }
+    if (!stream) return;
+    myVideo.current.srcObject = stream;
+    setMute(myVideo.current.muted);
   }, [stream]);
 
+  useEffect(() => {
+    if (!stream) return;
+    myVideo.current.muted = mute;
+  }, [stream, mute]);
+
+  const handleMute = () => {
+    setMute((prev) => !prev);
+  };
+
   return (
-    <VideosWrapper>
+    <VideosWrapper
+      className={`${channelContext === ChannelTypeEnum.VOICE ? "" : "hidden"}`}
+    >
       <Videos id='videos'>
         <VideoContainer>
           {stream && <Video ref={myVideo} autoPlay playsInline muted />}
-          <VideoDescription>{name}</VideoDescription>
+          <VideoDescription mute={mute ? "true" : "false"}>
+            {name}
+            {mute ? (
+              <MicOffIcon onClick={handleMute} className='mx-4' />
+            ) : (
+              <MicIcon onClick={handleMute} className='mx-4' />
+            )}
+          </VideoDescription>
         </VideoContainer>
         {/* <VideoContainer>
           {stream && <Video ref={myVideo} autoPlay playsInline muted />}
@@ -60,9 +77,7 @@ const VoiceChannelDisplay = ({ channelUUID, channelName }) => {
   );
 };
 
-const VideosWrapper = styled.div`
-  overflow: auto;
-`;
+const VideosWrapper = tw.div`overflow-auto absolute h-full bg-eerie-400`;
 
 const Videos = styled.div`
   display: grid;
@@ -89,7 +104,7 @@ const VideoDescription = styled.div`
   background: #2c2c2c;
   color: #ececec;
   margin: 8px;
-  border: 2px solid #1b1b1b;
+  border: 2px solid ${({ mute }) => (mute === "false" ? "#1b1b1b" : "red")};
   border-bottom-left-radius: 12px;
   border-top-right-radius: 12px;
   padding: 8px 16px;

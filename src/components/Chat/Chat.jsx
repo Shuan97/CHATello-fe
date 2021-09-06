@@ -4,6 +4,7 @@ import VoiceChannelDisplay from "components/Chat/VoiceChannel/VoiceChannelDispla
 import {
   fetchTextChannels,
   selectCurrentChannel,
+  selectCurrentVoiceChannel,
 } from "features/channelsSlice";
 import { fetchMessagesByChannel } from "features/messagesSlice";
 import React, { useEffect } from "react";
@@ -15,7 +16,7 @@ import ChatMessages from "./ChatMessages";
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const { UUID, name, type } = useSelector(selectCurrentChannel);
+  const { UUID, name } = useSelector(selectCurrentChannel);
 
   useEffect(() => {
     if (!UUID) {
@@ -26,17 +27,26 @@ const Chat = () => {
   }, [dispatch, UUID]);
 
   const renderChat = () => {
-    if (type === "TEXT") {
-      return (
-        <>
-          <ChatMessages />
-          <ChatInput channelUUID={UUID} channelName={name} />
-        </>
-      );
-    }
-    if (type === "VOICE") {
-      return <VoiceChannelDisplay channelUUID={UUID} channelName={name} />;
-    }
+    // if (!!UUID) {
+    return (
+      <>
+        <ChatMessages />
+        <ChatInput channelUUID={UUID} channelName={name} />
+        <VoiceChannelDisplay />;
+      </>
+    );
+    // }
+    // if (type === "TEXT") {
+    //   return (
+    //     <>
+    //       <ChatMessages />
+    //       <ChatInput channelUUID={UUID} channelName={name} />
+    //     </>
+    //   );
+    // }
+    // if (type === "VOICE") {
+    //   return <VoiceChannelDisplay channelUUID={UUID} channelName={name} />;
+    // }
   };
 
   return (
@@ -45,7 +55,7 @@ const Chat = () => {
       <ChatSidebar />
       <MainChat>
         <ChatHeader channelName={name} />
-        {renderChat()}
+        <ChatWrapper>{renderChat()}</ChatWrapper>
       </MainChat>
     </StyledChat>
   );
@@ -53,5 +63,6 @@ const Chat = () => {
 
 const MainChat = tw.div`flex flex-col w-full`;
 const StyledChat = tw.div`flex`;
+const ChatWrapper = tw.div`flex flex-col w-full flex-1 relative bg-eerie-400`;
 
 export default Chat;
